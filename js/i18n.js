@@ -49,6 +49,14 @@ function applyTranslations(lang) {
         }
     });
 
+    // Apply HTML translations (for elements that need formatting)
+    document.querySelectorAll('[data-i18n-html]').forEach(element => {
+        const key = element.getAttribute('data-i18n-html');
+        if (t[key]) {
+            element.innerHTML = t[key];
+        }
+    });
+
     // Update HTML lang attribute
     document.documentElement.lang = lang;
 

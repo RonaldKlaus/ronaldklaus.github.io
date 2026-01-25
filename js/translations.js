@@ -8,7 +8,7 @@ const translations = {
         location: 'Berlin / Germany',
         
         // Hero section
-        intro: 'Software Engineer for 25+ years. Building high-impact products with Ruby, Elixir, and VueJS. Currently shaping the future of mobility at Free2move. Passionate about UX, Interior Design, and the perfect Muscle-Up.',
+        intro: 'Software Engineer for <span class="text-[var(--accent)]">25+ years</span>. Building high-impact products with <span class="text-[var(--accent)]">Ruby</span>, <span class="text-[var(--accent)]">Elixir</span>, and <span class="text-[var(--accent)]">JS/TS/VueJS</span>. Currently shaping the future of mobility at <span class="text-[var(--accent)]">Free2move</span>. Passionate about UX, Interior Design, and the perfect <span class="text-[var(--accent)]">Muscle-Up</span>.',
         base: 'Base',
         contact: 'Contact',
         
@@ -24,7 +24,7 @@ const translations = {
         location: 'Berlin / Deutschland',
         
         // Hero section
-        intro: 'Software Engineer mit über 25 Jahren Erfahrung. Ich baue high-impact Produkte mit Ruby, Elixir und VueJS. Derzeit gestalte ich die Zukunft der Mobilität bei Free2move. Leidenschaftlich interessiert an UX, Interior Design und dem perfekten Muscle-Up.',
+        intro: 'Software Engineer mit <span class="text-[var(--accent)]">über 25 Jahren</span> Erfahrung. Ich baue high-impact Produkte mit <span class="text-[var(--accent)]">Ruby</span>, <span class="text-[var(--accent)]">Elixir</span> und <span class="text-[var(--accent)]">JS/TS/VueJS</span>. Derzeit gestalte ich die Zukunft der Mobilität bei <span class="text-[var(--accent)]">Free2move</span>. Leidenschaftlich interessiert an UX, Interior Design und dem perfekten <span class="text-[var(--accent)]">Muscle-Up</span>.',
         base: 'Standort',
         contact: 'Kontakt',
         
