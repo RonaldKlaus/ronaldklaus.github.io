@@ -8,7 +8,7 @@ const colors = [
     '#FF3300', // International Orange
     '#0047AB', // Cobalt Blue
     '#00D800', // Terminal Green
-    '#FFD700', // Signal Yellow
+    '#ffaa00', // Signal Yellow
     '#FF00FF', // Magenta
     '#5500FF'  // Electric Violet
 ];

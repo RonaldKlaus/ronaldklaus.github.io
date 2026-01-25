@@ -14,7 +14,7 @@ const translations = {
         
         // Profile section
         role: 'Software Engineer',
-        bio: "Hi, I’m Ronald. When I’m not architecting scalable systems at Free2move (formerly Share Now) or tinkering with new software tools alongside my colleague Adam, you’ll likely find me outdoors with my camera or working out. As the father of a 5-year-old, I know the true meaning of multitasking. And since 2026, I’ve been proving in the calisthenics park that even after two decades in the tech business, you can still reach new heights—quite literally, with my first successful muscle-ups. I have a deep appreciation for great design, whether it’s in a user interface, interior architecture, or clean code.",
+        bio: "Hi, I’m Ronald. When I’m not architecting scalable systems at Free2move (formerly Share Now) or tinkering with new software tools alongside my colleague Adam, you’ll likely find me outdoors with my camera or working out. As the father of a 5-year-old, I know the true meaning of multitasking. And since 2026, I’ve been proving in the calisthenics park that even after two decades in the tech business, you can still reach new heights - quite literally, with my first successful muscle-ups. I have a deep appreciation for great design, whether it’s in a user interface, interior architecture, or clean code.",
         
         // Footer
         copyright: '© 2026 Ronald Klaus'
