@@ -1,25 +1,26 @@
 /* Visitenkarte · turn, tilt, sheen and the one-time turn hint (see REDESIGN.md, section 6).
- * Language-neutral: each face carries its own turn icon with a static aria-label in the HTML.
+ * Language-neutral: the hidden turn button carries its labels in data-label-front / data-label-back.
  * URL parameters for comparisons: ?side=back shows the back, ?tilt=0.5,-0.3 freezes the tilt.
+ * Defensive: if markup from another version is cached alongside this file, missing parts are
+ * skipped instead of aborting, so at least turning by click/tap keeps working.
  */
 (function () {
   'use strict';
 
   document.documentElement.classList.add('js');
 
-  var stage = document.querySelector('.stage');
   var card = document.querySelector('.card');
-  var front = document.querySelector('.face.front');
-  var back = document.querySelector('.face.back');
-  if (!stage || !card || !front || !back) return;
+  if (!card) return;
 
-  var frontIcon = front.querySelector('.turn-icon');
-  var backIcon = back.querySelector('.turn-icon');
+  var stage = document.querySelector('.stage') || document.body;
+  var front = card.querySelector('.face.front');
+  var back = card.querySelector('.face.back');
+  var srButton = document.querySelector('.turn-sr');
   var params = new URLSearchParams(location.search);
   var flipped = params.get('side') === 'back';
   var fixedTilt = params.get('tilt');
-  var reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
-  var finePointer = matchMedia('(hover: hover) and (pointer: fine)');
+  var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
   var TURN_MS = 900;
   var HINT_DELAY_MS = 1000;
   var STORAGE_KEY = 'rk-card-turned';
@@ -62,8 +63,15 @@
 
   // The hidden face is inert (not focusable, not announced) and ignores pointer events via CSS.
   function applySide() {
-    front.inert = flipped;
-    back.inert = !flipped;
+    if (front) front.inert = flipped;
+    if (back) back.inert = !flipped;
+    if (srButton) {
+      var label = flipped ? srButton.dataset.labelBack : srButton.dataset.labelFront;
+      if (label) {
+        srButton.setAttribute('aria-label', label);
+        srButton.textContent = label;
+      }
+    }
   }
 
   function storageGet() {
@@ -79,11 +87,10 @@
     card.classList.remove('hint');
   }
 
-  function turn(fromIcon) {
+  function turn() {
     var hiddenFace = flipped ? back : front; // the face that is about to be hidden
     var focused = document.activeElement;
-    // A pointer-down on plain card text already moved focus to <body>; hand it to the new icon too.
-    var moveFocus = fromIcon || !focused || focused === document.body || hiddenFace.contains(focused);
+    var focusWillBeLost = !!(hiddenFace && focused && hiddenFace.contains(focused));
 
     stopHint();
     storageSet();
@@ -96,12 +103,9 @@
     applySide();
     schedule();
 
-    // Never lose focus to <body> when the focused element just became inert.
-    // :focus-visible decides whether a ring shows (keyboard yes, mouse/touch no).
-    if (moveFocus) {
-      var icon = flipped ? backIcon : frontIcon;
-      if (icon) icon.focus({ preventScroll: true });
-    }
+    // Focus only moves if it sat on the face that just became inert (it would fall to <body>).
+    // Never on a plain tap: programmatic focus from <body> would show a focus ring on mobile.
+    if (focusWillBeLost && srButton) srButton.focus({ preventScroll: true });
   }
 
   stage.addEventListener('mousemove', function (e) {
@@ -120,28 +124,28 @@
   });
 
   // Turning off tilt mid-session (e.g. reduced motion switched on) recentres the card.
-  reducedMotion.addEventListener('change', function () {
-    if (reducedMotion.matches) stopHint();
-    if (!tiltEnabled() && !fixedTilt) {
-      tx = 0;
-      ty = 0;
-      schedule();
-    }
-  });
+  if (reducedMotion.addEventListener) {
+    reducedMotion.addEventListener('change', function () {
+      if (reducedMotion.matches) stopHint();
+      if (!tiltEnabled() && !fixedTilt) {
+        tx = 0;
+        ty = 0;
+        schedule();
+      }
+    });
+  }
 
-  // The turn icons are the accessible controls (keyboard, screen readers).
-  [frontIcon, backIcon].forEach(function (icon) {
-    if (icon) icon.addEventListener('click', function () { turn(true); });
-  });
+  // Keyboard / screen-reader control. Focus stays on it after turning.
+  if (srButton) srButton.addEventListener('click', turn);
 
-  // A click or tap on a free area of the card turns it too. Only 'click' is used,
-  // so a tap fires once and scrolling never turns the card.
+  // Main way: click or tap on the card. Only 'click' is used, so a tap fires once and
+  // scrolling never turns the card. The turn indicator has pointer-events: none.
   card.addEventListener('click', function (e) {
     if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-    if (e.target.closest(INTERACTIVE)) return; // links and the icons handle themselves
-    var selection = window.getSelection();
+    if (e.target.closest && e.target.closest(INTERACTIVE)) return; // links just do their job
+    var selection = window.getSelection && window.getSelection();
     if (selection && !selection.isCollapsed && selection.toString().trim() !== '') return; // user is selecting text
-    turn(false);
+    turn();
   });
 
   // One-time hint: a short wiggle about the Y axis, added on top of the tilt (--wiggle).

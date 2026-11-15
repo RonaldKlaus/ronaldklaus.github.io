@@ -3,3 +3,4 @@ exclude:
   - mockups
   - REDESIGN.md
   - serve.sh
+  - scripts
