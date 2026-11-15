@@ -1,256 +1,113 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ronald Klaus - Software Engineer</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ronald Klaus · Software Engineer, Berlin</title>
+  <meta name="description" content="Ronald Klaus, software engineer in Berlin. 25 years of Ruby, Elixir and TypeScript. Maker of bin dabei, Merged and Masi.">
+  <meta name="author" content="Ronald Klaus">
+  <meta name="robots" content="index, follow">
 
-    <!-- Primary Meta Tags -->
-    <meta name="description" content="Ronald Klaus - Software Engineer with 25+ years experience. Building high-impact products with Ruby, Elixir, and JavaScript/TypeScript. Based in Berlin, Germany.">
-    <meta name="author" content="Ronald Klaus">
-    <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://www.ronald-klaus.de/">
+  <link rel="alternate" hreflang="en" href="https://www.ronald-klaus.de/">
+  <link rel="alternate" hreflang="de" href="https://www.ronald-klaus.de/de/">
+  <link rel="alternate" hreflang="x-default" href="https://www.ronald-klaus.de/">
 
-    <!-- Canonical URL -->
-    <link rel="canonical" href="https://www.ronald-klaus.de/">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://www.ronald-klaus.de/">
+  <meta property="og:title" content="Ronald Klaus · Software Engineer, Berlin">
+  <meta property="og:description" content="Ronald Klaus, software engineer in Berlin. 25 years of Ruby, Elixir and TypeScript. Maker of bin dabei, Merged and Masi.">
+  <meta property="og:image" content="https://www.ronald-klaus.de/assets/my_image.png">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:locale:alternate" content="de_DE">
 
-    <!-- Language Alternates -->
-    <link rel="alternate" hreflang="en" href="https://www.ronald-klaus.de/">
-    <link rel="alternate" hreflang="de" href="https://www.ronald-klaus.de/">
-    <link rel="alternate" hreflang="x-default" href="https://www.ronald-klaus.de/">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:url" content="https://www.ronald-klaus.de/">
+  <meta name="twitter:title" content="Ronald Klaus · Software Engineer, Berlin">
+  <meta name="twitter:description" content="Ronald Klaus, software engineer in Berlin. 25 years of Ruby, Elixir and TypeScript. Maker of bin dabei, Merged and Masi.">
+  <meta name="twitter:image" content="https://www.ronald-klaus.de/assets/my_image.png">
 
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://www.ronald-klaus.de/">
-    <meta property="og:title" content="Ronald Klaus - Software Engineer">
-    <meta property="og:description" content="Software Engineer with 25+ years experience. Building high-impact products with Ruby, Elixir, and JavaScript/TypeScript. Based in Berlin, Germany.">
-    <meta property="og:image" content="https://www.ronald-klaus.de/assets/my_image.png">
-    <meta property="og:locale" content="en_US">
-    <meta property="og:locale:alternate" content="de_DE">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="/assets/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/css/card.css">
+  <script>document.documentElement.classList.add('js')</script>
+  <script src="/js/card.js" defer></script>
 
-    <!-- Twitter -->
-    <meta name="twitter:card" content="summary">
-    <meta name="twitter:url" content="https://www.ronald-klaus.de/">
-    <meta name="twitter:title" content="Ronald Klaus - Software Engineer">
-    <meta name="twitter:description" content="Software Engineer with 25+ years experience. Building high-impact products with Ruby, Elixir, and JavaScript/TypeScript.">
-    <meta name="twitter:image" content="https://www.ronald-klaus.de/assets/my_image.png">
-
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@400;500&display=swap"
-        rel="stylesheet">
-    <style>
-        :root {
-            /* Base values */
-            --bg: #E5E5E5;
-            --text: #111111;
-            --border-width: 3px;
-
-            /* Default Accent (overridden by JS) */
-            --accent: #FF3300;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            line-height: 1.1;
-            overflow-x: hidden;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-
-        .font-mono {
-            font-family: 'JetBrains Mono', monospace;
-        }
-
-        /* Brutalist Borders Helper Classes */
-        .b-border-b {
-            border-bottom: var(--border-width) solid var(--text);
-        }
-
-        .b-border-t {
-            border-top: var(--border-width) solid var(--text);
-        }
-
-        .b-border-r {
-            border-right: var(--border-width) solid var(--text);
-        }
-
-        .b-border-l {
-            border-left: var(--border-width) solid var(--text);
-        }
-
-        .b-all {
-            border: var(--border-width) solid var(--text);
-        }
-
-        /* Hover Invert Effect */
-        .hover-invert {
-            transition: all 0.1s steps(2);
-        }
-
-        .hover-invert:hover {
-            background-color: var(--text);
-            color: var(--bg);
-        }
-
-        /* Image Filter */
-        .img-grayscale {
-            filter: grayscale(100%);
-            transition: filter 0.3s ease;
-        }
-
-        .img-grayscale:hover {
-            filter: grayscale(0%);
-        }
-
-        /* Language Toggle */
-        .lang-toggle {
-            cursor: pointer;
-            transition: all 0.1s ease;
-        }
-
-        .lang-toggle:hover {
-            color: var(--accent);
-        }
-    </style>
-
-    <!-- JSON-LD Structured Data -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Person",
-        "name": "Ronald Klaus",
-        "url": "https://www.ronald-klaus.de",
-        "image": "https://www.ronald-klaus.de/assets/my_image.png",
-        "jobTitle": "Software Engineer",
-        "worksFor": {
-            "@type": "Organization",
-            "name": "Free2move"
-        },
-        "address": {
-            "@type": "PostalAddress",
-            "addressLocality": "Berlin",
-            "addressCountry": "Germany"
-        },
-        "email": "ronald@ronald-klaus.de",
-        "knowsAbout": ["Ruby", "Elixir", "JavaScript", "TypeScript", "VueJS", "Software Architecture", "UX Design"],
-        "description": "Software Engineer with 25+ years experience building high-impact products.",
-        "sameAs": [
-            "https://github.com/RonaldKlaus",
-            "https://www.linkedin.com/in/ronald-klaus/",
-            "https://roadwerk.io/"
-        ]
-    }
-    </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Ronald Klaus",
+    "url": "https://www.ronald-klaus.de",
+    "image": "https://www.ronald-klaus.de/assets/my_image.png",
+    "jobTitle": "Software Engineer",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Free2move"
+    },
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Berlin",
+      "addressCountry": "Germany"
+    },
+    "email": "ronald@ronald-klaus.de",
+    "knowsAbout": ["Ruby", "Elixir", "TypeScript", "Software Architecture", "UX Design"],
+    "description": "Software engineer in Berlin with 25 years of Ruby, Elixir and TypeScript. Maker of bin dabei, Merged and Masi.",
+    "sameAs": [
+      "https://github.com/RonaldKlaus",
+      "https://www.linkedin.com/in/ronald-klaus/"
+    ]
+  }
+  </script>
 </head>
+<body>
+  <main class="stage">
+    <div class="scene">
+      <div class="card" id="card">
+        <section class="face front" aria-label="Front">
+          <div class="sheen"></div>
+          <div class="top">
+            <span class="dot" aria-hidden="true"></span>
+            <nav class="lang" aria-label="Language">
+              <span class="current" aria-current="page">EN</span> / <a href="/de/" hreflang="de" lang="de">DE</a>
+            </nav>
+          </div>
+          <div>
+            <h1>Ronald Klaus</h1>
+            <p class="role">Software Engineer · Berlin</p>
+          </div>
+        </section>
 
-<body class="selection:bg-[var(--accent)] selection:text-white">
-
-    <!-- HEADER -->
-    <header class="b-border-b bg-[var(--bg)]">
-        <div class="flex justify-between items-end p-6 md:p-8">
-            <h1
-                class="text-6xl md:text-9xl font-black tracking-tighter uppercase leading-[0.8] select-none cursor-default">
-                Ronald<br>Klaus
-            </h1>
-            <div class="text-right">
-                <!-- Language Toggle -->
-                <div class="flex gap-2 font-mono text-xs uppercase tracking-widest mb-2 justify-end">
-                    <button data-lang-toggle="en" class="lang-toggle font-black underline">EN</button>
-                    <span>/</span>
-                    <button data-lang-toggle="de" class="lang-toggle text-gray-500">DE</button>
-                </div>
-                <div class="hidden md:block text-xs font-mono font-bold uppercase tracking-widest" data-i18n="location">
-                    Berlin / Germany
-                </div>
+        <section class="face back" aria-label="Back">
+          <div class="sheen"></div>
+          <div class="cols">
+            <div class="lcol">
+              <img class="photo" src="/assets/ronald-112.webp" width="56" height="56" alt="Portrait of Ronald Klaus" decoding="async">
+              <p class="lead">25 years of building software with Ruby, Elixir and TypeScript. I like tools that do one thing well.</p>
+              <p class="small">Day job: car sharing at Free2move</p>
             </div>
-        </div>
-    </header>
-
-    <!-- HERO SECTION -->
-    <section class="grid md:grid-cols-12">
-
-        <!-- LEFT: Intro -->
-        <div
-            class="md:col-span-8 p-6 md:p-12 flex flex-col justify-center b-border-b md:b-border-b-0 md:b-border-r min-h-[50vh]">
-            <p class="text-3xl md:text-5xl font-black uppercase leading-tight"
-                data-i18n-html="intro">
-                Software Engineer for <span class="text-[var(--accent)]">25+ years</span>. Building high-impact products with <span class="text-[var(--accent)]">Ruby</span>, <span class="text-[var(--accent)]">Elixir</span>, and <span class="text-[var(--accent)]">JS/TS/VueJS</span>. Currently shaping the future of mobility at <span class="text-[var(--accent)]">Free2move</span>. Passionate about UX, Interior Design, and the perfect <span class="text-[var(--accent)]">Muscle-Up</span>.
-            </p>
-        </div>
-
-        <!-- RIGHT: Info Stack -->
-        <div class="md:col-span-4 flex flex-col b-border-b md:b-border-b-0">
-
-            <!-- Box 1: Location -->
-            <div
-                class="flex-1 bg-[var(--bg)] p-6 md:p-8 b-border-b flex flex-col justify-between hover-invert transition-colors cursor-default">
-                <span class="font-mono text-xs uppercase tracking-[0.2em] font-bold" data-i18n="base">Base</span>
-                <h2 class="text-2xl md:text-3xl font-black uppercase">Berlin<br>Germany</h2>
+            <div class="rcol">
+              <div class="projects">
+                <h2 class="label">Things I make</h2>
+                <ul>
+                  <li><a href="https://bindabei.live"><strong>bin dabei <svg class="ext" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M2.5 9.5 9.5 2.5"/><path d="M3.5 2.5h6v6"/></svg></strong><span class="desc">RSVPs and shared costs for hobby groups</span></a></li>
+                  <li><a href="https://merged-app.de"><strong>Merged <svg class="ext" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M2.5 9.5 9.5 2.5"/><path d="M3.5 2.5h6v6"/></svg></strong><span class="desc">The blog for your website</span></a></li>
+                  <li><a href="https://masibook.de"><strong>Masi <svg class="ext" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M2.5 9.5 9.5 2.5"/><path d="M3.5 2.5h6v6"/></svg></strong><span class="desc">A notebook for iPad that behaves like one</span></a></li>
+                </ul>
+              </div>
+              <div class="contact">
+                <a class="mail" href="mailto:ronald@ronald-klaus.de">ronald@ronald-klaus.de</a>
+                <span class="soc"><a href="https://github.com/RonaldKlaus">GitHub</a><a href="https://www.linkedin.com/in/ronald-klaus/">LinkedIn</a></span>
+              </div>
             </div>
-
-            <!-- Box 2: Contact (CTA) -->
-            <a href="mailto:ronald@ronald-klaus.de"
-                class="flex-1 bg-[var(--accent)] text-white p-6 md:p-8 flex flex-col justify-between hover:bg-black transition-colors group cursor-pointer min-h-[25vh]">
-                <div class="flex justify-between items-start">
-                    <span
-                        class="font-mono text-xs uppercase tracking-[0.2em] font-bold group-hover:text-[var(--accent)]"
-                        data-i18n="contact">Contact</span>
-                    <svg class="w-6 h-6 transform group-hover:-translate-y-1 group-hover:translate-x-1 transition-transform"
-                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
-                            d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                    </svg>
-                </div>
-                <h2
-                    class="text-2xl md:text-3xl font-black uppercase underline decoration-4 underline-offset-4 group-hover:no-underline">
-                    Ronald@<br>Ronald-Klaus.de
-                </h2>
-            </a>
-
-        </div>
-    </section>
-
-    <!-- PROFILE SECTION -->
-    <section class="b-border-t border-[var(--text)]">
-        <div class="p-6 md:p-10 flex flex-col sm:flex-row gap-6 items-start">
-            <div
-                class="w-32 aspect-square shrink-0 bg-gray-300 border-[3px] border-black relative overflow-hidden group self-start">
-                <img src="assets/my_image.png" alt="Ronald Klaus"
-                    class="w-full h-full object-cover img-grayscale">
-                <div
-                    class="absolute inset-0 bg-[var(--accent)] mix-blend-multiply opacity-0 group-hover:opacity-40 transition-opacity pointer-events-none">
-                </div>
-            </div>
-
-            <div>
-                <h3 class="text-3xl font-black uppercase mb-2">Ronald Klaus</h3>
-                <span class="block font-mono text-xs font-bold uppercase tracking-widest mb-4 text-gray-500"
-                    data-i18n="role">Software Engineer</span>
-                <p class="text-base font-bold leading-tight" data-i18n="bio">
-                    Hi, I’m Ronald. When I’m not architecting scalable systems at Free2move (formerly Share Now) or tinkering with new software tools alongside my colleague Adam, you’ll likely find me outdoors with my camera or working out. As the father of a 5-year-old, I know the true meaning of multitasking. And since 2026, I’ve been proving in the calisthenics park that even after two decades in the tech business, you can still reach new heights - quite literally, with my first successful muscle-ups. I have a deep appreciation for great design, whether it’s in a user interface, interior architecture, or clean code.
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <!-- SIMPLE FOOTER -->
-    <footer class="b-border-t bg-white p-6 md:p-10 mt-auto">
-        <div class="flex flex-col md:flex-row justify-between items-end gap-6">
-            <div class="font-mono text-xs font-bold uppercase tracking-widest text-[var(--text)]">
-                Ronald Klaus
-            </div>
-            <p class="text-[10px] font-mono uppercase text-gray-500 font-bold" data-i18n="copyright">
-                © 2026 Ronald Klaus
-            </p>
-        </div>
-    </footer>
-
-    <!-- External JavaScript -->
-    <script type="module" src="js/main.js"></script>
+          </div>
+        </section>
+      </div>
+    </div>
+    <button class="turn" type="button" aria-controls="card" data-label-front="Turn it over" data-label-back="Turn back">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 12a9 9 0 0 1 15.5-6.2L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15.5 6.2L3 16"/><path d="M3 21v-5h5"/></svg>
+      <span class="turn-label">Turn it over</span>
+    </button>
+  </main>
 </body>
-
 </html>
