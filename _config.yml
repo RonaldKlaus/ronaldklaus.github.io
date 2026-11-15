@@ -1,0 +1,5 @@
+# GitHub Pages: keep design sources and local tooling out of the published site
+exclude:
+  - mockups
+  - REDESIGN.md
+  - serve.sh

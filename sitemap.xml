@@ -4,9 +4,19 @@
   <url>
     <loc>https://www.ronald-klaus.de/</loc>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.ronald-klaus.de/"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://www.ronald-klaus.de/"/>
-    <lastmod>2026-01-29</lastmod>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.ronald-klaus.de/de/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ronald-klaus.de/"/>
+    <lastmod>2026-11-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://www.ronald-klaus.de/de/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ronald-klaus.de/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.ronald-klaus.de/de/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ronald-klaus.de/"/>
+    <lastmod>2026-11-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
   </url>
 </urlset>

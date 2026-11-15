@@ -1,0 +1,440 @@
+/* Visitenkarte · shared stylesheet for / and /de/ (see REDESIGN.md) */
+
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("../assets/fonts/inter-latin-var.woff2") format("woff2");
+}
+
+:root {
+  --bg: #E4E4E1;
+  --paper: #FBFBF9;
+  --text: #111111;
+  --muted: #55555C;
+  --quiet: #6A6A70;
+  --line: #E8E8E4;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+a {
+  color: var(--text);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+a:focus-visible,
+.turn:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ---------- Stage ---------- */
+
+.stage {
+  min-height: 100svh;
+  padding: 40px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 36px;
+}
+
+.scene {
+  width: 100%;
+  max-width: 640px;
+}
+
+/* ---------- Card (base = no-JS: two flat cards stacked) ---------- */
+
+.card {
+  --rx: 0deg;
+  --ry: 0deg;
+  --gx: 50%;
+  --gy: 50%;
+  --band: 50%;
+  --shx: 0px;
+  --shy: 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+}
+
+.face {
+  position: relative;
+  aspect-ratio: 1.75 / 1;
+  border-radius: 14px;
+  overflow: clip; /* not a scroll container, so the card grows instead of cutting text */
+  background: var(--paper);
+  box-shadow: var(--shx) var(--shy) 60px rgba(0, 0, 0, .18), 0 2px 4px rgba(0, 0, 0, .08);
+}
+
+/* Sheen sits UNDER the content: only the paper shines, text stays black */
+.sheen {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.face > :not(.sheen) {
+  position: relative;
+  z-index: 1;
+}
+
+.front .sheen {
+  background:
+    radial-gradient(circle at var(--gx) var(--gy), rgba(255, 255, 255, .85) 0%, rgba(255, 255, 255, 0) 42%, rgba(0, 0, 0, .05) 100%),
+    linear-gradient(115deg, rgba(255, 255, 255, 0) calc(var(--band) - 18%), rgba(255, 255, 255, .55) var(--band), rgba(255, 255, 255, 0) calc(var(--band) + 18%));
+}
+
+/* Back is rotated, so the highlight is mirrored horizontally */
+.back .sheen {
+  background: radial-gradient(circle at calc(100% - var(--gx)) var(--gy), rgba(255, 255, 255, .7) 0%, rgba(255, 255, 255, 0) 42%, rgba(0, 0, 0, .04) 100%);
+}
+
+/* ---------- 3D (only with JS) ---------- */
+
+.js .scene {
+  perspective: 1600px;
+}
+
+.js .card {
+  display: block;
+  position: relative;
+  aspect-ratio: 1.75 / 1;
+  transform-style: preserve-3d;
+  transform: rotateX(var(--rx)) rotateY(var(--ry));
+  transition: transform .2s ease-out;
+}
+
+.js .card.turning {
+  transition: transform .9s cubic-bezier(.34, 1.3, .5, 1);
+}
+
+.js .face {
+  position: absolute;
+  inset: 0;
+  aspect-ratio: auto;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: translateZ(1px);
+}
+
+.js .back {
+  transform: rotateY(180deg) translateZ(1px);
+}
+
+/* The hidden face must not swallow hover and clicks */
+.js .face[inert] {
+  pointer-events: none;
+}
+
+/* ---------- Front ---------- */
+
+.front {
+  padding: 36px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--text);
+}
+
+.lang {
+  font-size: 12px;
+  letter-spacing: .08em;
+  color: var(--text);
+}
+
+.lang a {
+  color: var(--quiet);
+}
+
+h1 {
+  margin: 0;
+  font-size: 36px;
+  font-weight: 600;
+  letter-spacing: -.03em;
+  line-height: 1.1;
+}
+
+.role {
+  margin: 0;
+  color: var(--muted);
+}
+
+/* ---------- Back ---------- */
+
+.back {
+  padding: 28px 32px;
+}
+
+.cols {
+  height: 100%;
+  display: flex;
+  gap: 28px;
+}
+
+.lcol {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px;
+  padding-right: 28px;
+  border-right: 1px solid var(--line);
+}
+
+.rcol {
+  flex: 1.2 1 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.photo {
+  display: block;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+  filter: grayscale(1);
+  transition: filter .5s ease;
+}
+
+.photo:hover {
+  filter: grayscale(0);
+}
+
+.lead {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.4;
+  letter-spacing: -.01em;
+  text-wrap: pretty;
+}
+
+.small {
+  margin: 0;
+  font-size: 12px;
+  color: var(--quiet);
+}
+
+.label {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--quiet);
+}
+
+.projects {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.projects ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.projects a {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.3;
+}
+
+.projects strong {
+  font-weight: 600;
+}
+
+/* External-link arrow, drawn instead of the "↗" glyph (not in the Inter subset) */
+.projects .ext {
+  display: inline-block;
+  width: .78em;
+  height: .78em;
+  vertical-align: -.04em;
+}
+
+.projects .desc {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.contact {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 4px 14px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+  font-size: 13px;
+}
+
+.contact .mail {
+  font-weight: 600;
+}
+
+.contact .soc {
+  display: flex;
+  gap: 12px;
+}
+
+.contact .soc a {
+  color: var(--muted);
+}
+
+/* ---------- Turn button (only with JS) ---------- */
+
+.turn {
+  display: none;
+}
+
+.js .turn {
+  font: inherit;
+  cursor: pointer;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  min-height: 44px;
+  padding: 0 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.js .turn:hover {
+  color: var(--text);
+}
+
+.turn svg {
+  flex: none;
+}
+
+/* ---------- Mobile ---------- */
+
+@media (max-width: 560px) {
+  .face,
+  .js .card {
+    aspect-ratio: .6 / 1;
+  }
+
+  /* Portrait card: stack both faces in one grid cell so the ratio acts as a
+     minimum and longer text (e.g. German, 320px) grows the card instead of
+     being cut off. */
+  .js .card {
+    display: grid;
+  }
+
+  .js .face {
+    position: relative;
+    inset: auto;
+    grid-area: 1 / 1;
+  }
+
+  .cols {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .lcol {
+    flex: 0 0 auto;
+    justify-content: flex-start;
+    gap: 14px;
+    border-right: 0;
+    padding-right: 0;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 20px;
+  }
+
+  .rcol {
+    flex: 1 1 auto;
+  }
+
+  /* Touch targets >= 44px via padding, not bigger type */
+  .lang a,
+  .lang .current {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    margin: -15px 0;
+  }
+
+  .projects ul {
+    gap: 0;
+  }
+
+  .projects a {
+    min-height: 44px;
+    padding: 5px 0;
+    justify-content: center;
+  }
+
+  /* One line at 375/390px: tighter gaps between the links, same type size.
+     At 320px it wraps; the social links then sit left-aligned under the mail. */
+  .contact {
+    padding-top: 0;
+    column-gap: 6px;
+    row-gap: 0;
+  }
+
+  .contact .soc {
+    gap: 8px;
+  }
+
+  .contact a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .js .card,
+  .js .card.turning,
+  .photo {
+    transition: none;
+  }
+}
