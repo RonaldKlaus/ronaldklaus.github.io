@@ -133,6 +133,13 @@ a:focus-visible {
   transition: transform .9s cubic-bezier(.34, 1.3, .5, 1);
 }
 
+/* Opened on the back (#back, e.g. after switching language there): no turn on load.
+   Set by the inline script in <head>, removed by js/card.js after the first frames. */
+.js.start-back .card {
+  --ry: 180deg;
+  transition: none;
+}
+
 /* One-time turn hint (js/card.js adds .hint ~1s after load): a short swing
    about the Y axis that springs back. --wiggle is added on top of the tilt,
    so mouse movement during the hint does not make the card jump. */
@@ -235,6 +242,15 @@ h1 {
   padding: 28px 32px 36px;
 }
 
+/* Language switch on the back: top-right, on the line of the "Things I make" label */
+.back > .lang {
+  position: absolute;
+  top: 27px;
+  right: 32px;
+  z-index: 2; /* above .cols, which comes later and would otherwise catch its clicks */
+  line-height: 1.5;
+}
+
 .cols {
   height: 100%;
   display: flex;
@@ -275,8 +291,8 @@ h1 {
 
 .lead {
   margin: 0;
-  font-size: 17px;
-  line-height: 1.4;
+  font-size: 15px;
+  line-height: 1.45;
   letter-spacing: -.01em;
   text-wrap: pretty;
 }
@@ -350,6 +366,45 @@ h1 {
 
 .contact .soc a {
   color: var(--muted);
+}
+
+/* Narrow landscape card (viewport 561-688px, card narrower than 640px): the fixed
+   card height leaves less room for the lead, so step the type down, and below 640px
+   also tighten padding, gaps and photo so the German lead still fits. */
+@media (min-width: 561px) and (max-width: 688px) {
+  .lead {
+    font-size: 14px;
+    line-height: 1.4;
+  }
+}
+
+@media (min-width: 561px) and (max-width: 640px) {
+  .back {
+    padding: 24px 28px 34px;
+  }
+
+  .back > .lang {
+    top: 23px;
+    right: 28px;
+  }
+
+  .cols {
+    gap: 22px;
+  }
+
+  .lcol {
+    gap: 10px;
+    padding-right: 22px;
+  }
+
+  .photo {
+    width: 48px;
+    height: 48px;
+  }
+
+  .lead {
+    font-size: 13px;
+  }
 }
 
 /* ---------- Turn indicator + hidden turn button (only with JS) ---------- */
@@ -464,6 +519,11 @@ h1 {
 
   .rcol {
     flex: 1 1 auto;
+  }
+
+  /* Keeps the card at its 0.6 ratio at 375/390px in both languages */
+  .lead {
+    font-size: 14px;
   }
 
   /* Touch targets >= 44px via padding, not bigger type */

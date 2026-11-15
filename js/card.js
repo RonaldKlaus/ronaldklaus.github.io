@@ -1,6 +1,8 @@
 /* Visitenkarte · turn, tilt, sheen and the one-time turn hint (see REDESIGN.md, section 6).
  * Language-neutral: the hidden turn button carries its labels in data-label-front / data-label-back.
  * URL parameters for comparisons: ?side=back shows the back, ?tilt=0.5,-0.3 freezes the tilt.
+ * #back opens the card on the back without turning (used by the language switch on the back);
+ * the hash follows the visible side via history.replaceState, so reloading keeps the side.
  * Defensive: if markup from another version is cached alongside this file, missing parts are
  * skipped instead of aborting, so at least turning by click/tap keeps working.
  */
@@ -17,7 +19,9 @@
   var back = card.querySelector('.face.back');
   var srButton = document.querySelector('.turn-sr');
   var params = new URLSearchParams(location.search);
-  var flipped = params.get('side') === 'back';
+  var root = document.documentElement;
+  var BACK_HASH = '#back';
+  var flipped = params.get('side') === 'back' || location.hash === BACK_HASH;
   var fixedTilt = params.get('tilt');
   var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   var finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
@@ -87,6 +91,14 @@
     card.classList.remove('hint');
   }
 
+  // Only the side hash is managed; any other fragment is left alone.
+  function syncHash() {
+    if (location.hash && location.hash !== BACK_HASH) return;
+    if (!window.history || !history.replaceState) return;
+    var url = location.pathname + location.search + (flipped ? BACK_HASH : '');
+    try { history.replaceState(history.state, '', url); } catch (e) { /* sandboxed etc. */ }
+  }
+
   function turn() {
     var hiddenFace = flipped ? back : front; // the face that is about to be hidden
     var focused = document.activeElement;
@@ -101,6 +113,7 @@
       card.classList.remove('turning');
     }, TURN_MS);
     applySide();
+    syncHash();
     schedule();
 
     // Focus only moves if it sat on the face that just became inert (it would fall to <body>).
@@ -148,6 +161,12 @@
     turn();
   });
 
+  // Someone edits the URL or follows an in-page link to #back (or away from it).
+  window.addEventListener('hashchange', function () {
+    var wantBack = location.hash === BACK_HASH;
+    if (wantBack !== flipped && (wantBack || !location.hash)) turn();
+  });
+
   // One-time hint: a short wiggle about the Y axis, added on top of the tilt (--wiggle).
   // Skipped for reduced motion, comparison URLs, visitors who have turned the card before,
   // and browsers without @property (the keyframes would jump instead of easing).
@@ -163,6 +182,16 @@
     }, HINT_DELAY_MS);
   }
 
+  // Starting on the back (#back or ?side=back): show it without the turn animation.
+  // The inline script in <head> already sets .start-back for #back to avoid a flash of the front.
+  if (flipped) root.classList.add('start-back');
   applySide();
   render();
+  if (root.classList.contains('start-back')) {
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        root.classList.remove('start-back');
+      });
+    });
+  }
 })();
