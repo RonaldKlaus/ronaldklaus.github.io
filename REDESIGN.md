@@ -82,11 +82,11 @@ Beide Spalten verteilen ihren Inhalt vertikal (`justify-content: space-between`)
 | Stelle | Text |
 |---|---|
 | Rolle | Software Engineer · Berlin |
-| Satz | 25 years of building software with Ruby, Elixir and TypeScript. I like tools that do one thing well. |
+| Satz | AI-focused engineer with a product mindset and 25+ years full-stack (Ruby, Elixir, TypeScript). I'd rather solve the right problem than the quick one. Off duty: dad, friend, photographer, somewhere between bike saddle and kettlebell. |
 | Label | Things I make |
 | bin dabei | RSVPs and shared costs for hobby groups |
 | Merged | The blog for your website |
-| Masi | A notebook for iPad that behaves like one |
+| Masi | The paper notebook, made digital |
 | Versteckter Button vorne (`aria-label`) | Turn card over |
 | Versteckter Button hinten (`aria-label`) | Turn card back |
 | Foto-Alt | Portrait of Ronald Klaus |
@@ -95,11 +95,11 @@ Beide Spalten verteilen ihren Inhalt vertikal (`justify-content: space-between`)
 | Stelle | Text |
 |---|---|
 | Rolle | Software Engineer · Berlin |
-| Satz | Seit 25 Jahren baue ich Software mit Ruby, Elixir und TypeScript. Ich mag Werkzeuge, die eine Sache gut machen. |
+| Satz | KI-Engineer mit Produktblick und über 25 Jahren Full-Stack-Erfahrung (Ruby, Elixir, TypeScript). Ich löse lieber das richtige Problem als das schnelle. Privat: Vater, Freund, Fotograf und irgendwo zwischen Fahrradsattel und Kettlebell. |
 | Label | Was ich baue |
-| bin dabei | Zusagen und geteilte Kosten für Hobbygruppen |
+| bin dabei | Wer kommt, wer zahlt was: für Hobbygruppen |
 | Merged | Der Blog für deine Website |
-| Masi | Ein Notizbuch fürs iPad, das sich wie eins verhält |
+| Masi | Das analoge Notizbuch, digital |
 | Versteckter Button vorne (`aria-label`) | Karte umdrehen |
 | Versteckter Button hinten (`aria-label`) | Karte zurückdrehen |
 | Foto-Alt | Porträt von Ronald Klaus |
@@ -114,7 +114,7 @@ Die Button-Texte stehen als `data-label-front` / `data-label-back` am versteckte
 - GitHub: https://github.com/RonaldKlaus
 - LinkedIn: https://www.linkedin.com/in/ronald-klaus/
 
-**Nicht erwähnen:** Prompteur, roadwerk, Adam. Keine lange Bio, kein Muscle-up-Text, keine Familie.
+**Nicht erwähnen:** Prompteur, roadwerk, Adam. Keine lange Bio, kein Muscle-up-Text. Privates nur als kurze Aufzählung im Lead-Satz.
 
 ## 5. Gestaltung (exakte Werte)
 
