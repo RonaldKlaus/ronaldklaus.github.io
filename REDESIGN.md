@@ -20,7 +20,7 @@ Der Ordner `mockups/` wird nach der Umsetzung nicht deployt: in `_config.yml` mi
 
 ## 1. Idee in einem Satz
 
-Die ganze Seite ist eine einzige Visitenkarte auf grauem Grund. Vorne stehen Name und Rolle. Per Button dreht man sie um, und die Rückseite zeigt, wer Ronald ist, was er baut und wie man ihn erreicht. Die Karte kippt leicht mit der Maus, ein Lichtreflex wandert über das Papier.
+Die ganze Seite ist eine einzige Visitenkarte auf grauem Grund. Vorne stehen Name und Rolle. Per Klick auf die Karte oder das kleine Dreh-Icon in ihrer Ecke dreht man sie um, und die Rückseite zeigt, wer Ronald ist, was er baut und wie man ihn erreicht. Die Karte kippt leicht mit der Maus, ein Lichtreflex wandert über das Papier.
 
 ## 2. Ziel-Dateistruktur
 
@@ -28,7 +28,7 @@ Die ganze Seite ist eine einzige Visitenkarte auf grauem Grund. Vorne stehen Nam
 index.html          Englische Seite (Standard)
 de/index.html       Deutsche Seite
 css/card.css        Gemeinsames Stylesheet für beide Sprachen
-js/card.js          Gemeinsames Script (Umdrehen, Tilt, Reflex)
+js/card.js          Gemeinsames Script (Umdrehen, Tilt, Reflex, Dreh-Hinweis)
 assets/my_image.png Bestehendes Foto (460×460), bleibt
 assets/ronald-112.webp  NEU: Foto verkleinert auf 112×112 (2× für 56px), WebP
 assets/fonts/       NEU: Inter als selbst gehostete woff2 (Variable Font oder 400/500/600)
@@ -48,11 +48,10 @@ Keine Frameworks, kein Tailwind-CDN, kein Build-Schritt, keine externen Requests
   <main class="stage">
     <div class="scene">
       <div class="card">                 ← kippt und dreht sich
-        <section class="face front">…</section>
-        <section class="face back">…</section>
+        <section class="face front">…  <button class="turn-icon">↻</button></section>
+        <section class="face back">…   <button class="turn-icon">↻</button></section>
       </div>
     </div>
-    <button class="turn">↻ Turn it over</button>
   </main>
 </body>
 ```
@@ -61,6 +60,7 @@ Keine Frameworks, kein Tailwind-CDN, kein Build-Schritt, keine externen Requests
 - Oben links: schwarzer Punkt, 14×14px, rund, dekorativ (`aria-hidden="true"`)
 - Oben rechts: Sprachwahl als Links: `EN / DE`. Die aktive Sprache ist nicht verlinkt und in `#111111`, die andere ist ein Link in `#6A6A70`. EN verlinkt auf `/`, DE auf `/de/`.
 - Unten links: `<h1>Ronald Klaus</h1>`, darunter `Software Engineer · Berlin`
+- Unten rechts, gegenüber der h1: Dreh-Icon (siehe 5.)
 
 ### Rückseite: zwei Spalten
 Linke Spalte (flex 1), rechts davon eine 1px-Trennlinie `#E8E8E4`, 28px Innenabstand zur Linie:
@@ -68,7 +68,7 @@ Linke Spalte (flex 1), rechts davon eine 1px-Trennlinie `#E8E8E4`, 28px Innenabs
 - Ein Satz (17px, line-height 1.4, letter-spacing -0.01em), unten in der Spalte
 
 Rechte Spalte (flex 1.2):
-- Label in Versalien (11px, letter-spacing 0.1em, `#6A6A70`): „Things I make“
+- Label in Versalien (11px, letter-spacing 0.1em, `#6A6A70`): „Things I make“, rechts daneben auf gleicher Höhe das Dreh-Icon (oben rechts auf der Rückseite)
 - Drei Projekte untereinander, Abstand 10px. Je: Name fett (600) mit „↗“, darunter Beschreibung (13px, `#55555C`). Ganze Zeile ist der Link, `target` NICHT auf `_blank` setzen.
 - Unten, durch 1px-Linie `#E8E8E4` getrennt: E-Mail-Link (fett) links, GitHub und LinkedIn rechts (`#55555C`), 13px
 
@@ -85,8 +85,8 @@ Beide Spalten verteilen ihren Inhalt vertikal (`justify-content: space-between`)
 | bin dabei | RSVPs and shared costs for hobby groups |
 | Merged | The blog for your website |
 | Masi | A notebook for iPad that behaves like one |
-| Button vorne | Turn it over |
-| Button hinten | Turn back |
+| Icon vorne (`aria-label`) | Turn card over |
+| Icon hinten (`aria-label`) | Turn card back |
 | Foto-Alt | Portrait of Ronald Klaus |
 
 ### Deutsch (`de/index.html`, `<html lang="de">`)
@@ -98,11 +98,11 @@ Beide Spalten verteilen ihren Inhalt vertikal (`justify-content: space-between`)
 | bin dabei | Zusagen und geteilte Kosten für Hobbygruppen |
 | Merged | Der Blog für deine Website |
 | Masi | Ein Notizbuch fürs iPad, das sich wie eins verhält |
-| Button vorne | Umdrehen |
-| Button hinten | Zurückdrehen |
+| Icon vorne (`aria-label`) | Karte umdrehen |
+| Icon hinten (`aria-label`) | Karte zurückdrehen |
 | Foto-Alt | Porträt von Ronald Klaus |
 
-Die Button-Texte stehen als `data-label-front` / `data-label-back` am Button, damit `card.js` sprachneutral bleibt.
+Jede Seite hat ihr eigenes Icon mit statischem `aria-label` im HTML, damit `card.js` sprachneutral bleibt.
 
 ### Links
 - bin dabei: https://bindabei.live
@@ -135,19 +135,19 @@ Die Button-Texte stehen als `data-label-front` / `data-label-back` am Button, da
 | Spaltenabstand hinten | 28px |
 | Schatten | `Xpx Ypx 60px rgba(0,0,0,.18), 0 2px 4px rgba(0,0,0,.08)` (X/Y dynamisch, siehe 6.) |
 
-Bühne: Karte und Button zentriert (Flex, vertikal und horizontal), `min-height: 100svh`, Padding 40px 24px, Abstand Karte → Button 36px.
+Bühne: Karte allein zentriert (Flex, vertikal und horizontal), `min-height: 100svh`, Padding 40px 24px. Kein Button unter der Karte.
 
-Button: ohne Rahmen und Hintergrund, `#55555C`, Hover `#111111`, min. 44px hoch, davor ein Dreh-Icon als Inline-SVG (Strich, 18px, `aria-hidden`). Sichtbarer Fokus-Ring für Tastatur (`:focus-visible`).
+Dreh-Icon (`.turn-icon`, je Seite eins): echter `<button type="button">` ohne Rahmen und Hintergrund, Dreh-Symbol ↻ als Inline-SVG (Strich, 20px, `aria-hidden`), Farbe `#6A6A70`, Hover und Fokus `#111111`. Klickfläche 44×44px über Padding mit negativem Margin, damit das Layout nicht verrutscht. Sichtbarer Fokus-Ring für Tastatur (`:focus-visible`). Beim Hover dreht sich das Symbol einmal um 180° (nicht bei reduzierter Bewegung).
 
 Links: keine Unterstreichung, bei Hover Unterstreichung mit `text-underline-offset: 3px`.
 
 ## 6. Verhalten
 
 ### Umdrehen
-- Klick auf den Button dreht die Karte um die Y-Achse um 180°.
-- Ein Klick oder Tap auf eine freie Fläche der Karte dreht sie ebenso (nur `click`-Event). Nicht bei Klicks auf Links oder andere interaktive Elemente, nicht bei aktiver Textauswahl, nicht bei Mittelklick oder Modifier-Tasten. Die Karte bekommt kein `role="button"`, Tastaturbedienung läuft über den Button. Mit JS: `cursor: pointer` auf den Kartenflächen.
+- Klick auf das Dreh-Icon dreht die Karte um die Y-Achse um 180°.
+- Ein Klick oder Tap auf eine freie Fläche der Karte dreht sie ebenso (nur `click`-Event). Nicht bei Klicks auf Links oder andere interaktive Elemente, nicht bei aktiver Textauswahl, nicht bei Mittelklick oder Modifier-Tasten. Die Karte bekommt kein `role="button"`, Tastaturbedienung läuft über die Dreh-Icons. Mit JS: `cursor: pointer` auf den Kartenflächen.
 - Während des Umdrehens: `transition: transform .9s cubic-bezier(.34,1.3,.5,1)` (leichtes Nachfedern). Danach wieder die schnelle Tilt-Transition (siehe unten). Umsetzung: Klasse `.turning` setzen und nach 900ms entfernen.
-- Button-Text wechselt zwischen Front- und Back-Label.
+- Fokus: Wurde über das Icon gedreht (oder lag der Fokus auf der nun verdeckten Seite), wandert der Fokus per `focus({preventScroll: true})` auf das Icon der neuen Seite. `:focus-visible` entscheidet, ob ein Ring sichtbar ist. Der Fokus geht nie auf `body` verloren.
 - Die jeweils verdeckte Seite bekommt `inert` UND `pointer-events: none`. **Wichtig:** Ohne `pointer-events: none` liegt die unsichtbare Seite über der sichtbaren und schluckt Hover und Klicks (Fehler aus dem Prototyp).
 - Beide Seiten: `backface-visibility: hidden`. Vorderseite `transform: translateZ(1px)`, Rückseite `transform: rotateY(180deg) translateZ(1px)`. Die Karte hat `transform-style: preserve-3d`, die Szene `perspective: 1600px`.
 
@@ -173,11 +173,17 @@ Jede Seite hat ein Overlay `.sheen` (absolut, `inset: 0`, `pointer-events: none`
 - Standard `filter: grayscale(1)`, bei Hover `grayscale(0)`, `transition: filter .5s ease`.
 - **Keine** Skalierung beim Hover (führte im Prototyp zu Flackern).
 
+### Dreh-Hinweis (Anwackeln)
+- Etwa 1 s nach dem Laden schwingt die Karte einmal um ca. 20° um die Y-Achse an und federt zurück (0,9 s), sodass man kurz die Kante sieht.
+- Umsetzung: Klasse `.hint` mit einer Keyframe-Animation auf `--wiggle` (per `@property` als `<angle>` registriert), das zur Tilt-Drehung addiert wird: `rotateY(calc(var(--ry) + var(--wiggle)))`. So verträgt es sich mit gleichzeitiger Mausbewegung.
+- Nur einmal pro Seitenaufruf und nur, solange noch nicht gedreht wurde. Ein Umdrehen vorher oder währenddessen bricht es ab. Nach dem ersten Umdrehen merkt `localStorage` (`rk-card-turned`, in try/catch) sich das, und bei späteren Besuchen entfällt der Hinweis.
+- Entfällt bei `prefers-reduced-motion`, bei `?side=back` und `?tilt=…` sowie in Browsern ohne `@property`.
+
 ### Reduzierte Bewegung
-Bei `prefers-reduced-motion: reduce`: kein Tilt, kein Reflex-Tracking (Reflex statisch in der Mitte), Umdrehen ohne Transition.
+Bei `prefers-reduced-motion: reduce`: kein Tilt, kein Reflex-Tracking (Reflex statisch in der Mitte), Umdrehen ohne Transition, kein Anwackeln, keine Icon-Drehung beim Hover.
 
 ### Ohne JavaScript
-Das Script setzt beim Start `document.documentElement.classList.add('js')`. Nur unter `.js` gelten 3D-Transform, `position: absolute` der Seiten und der Button. Ohne JS stehen Vorder- und Rückseite einfach untereinander als zwei flache Karten, und der Button ist ausgeblendet.
+Das Script setzt beim Start `document.documentElement.classList.add('js')`. Nur unter `.js` gelten 3D-Transform, `position: absolute` der Seiten und die Dreh-Icons. Ohne JS stehen Vorder- und Rückseite einfach untereinander als zwei flache Karten, und die Icons sind ausgeblendet.
 
 ## 7. Mobil (Breite ≤ 560px)
 
@@ -185,15 +191,15 @@ Das Script setzt beim Start `document.documentElement.classList.add('js')`. Nur 
 - Rückseite: Spalten untereinander (`flex-direction: column`, gap 20px)
 - Linke Spalte: keine vertikale Linie, stattdessen `border-bottom: 1px solid #E8E8E4`, `padding-bottom: 20px`, Inhalt oben ausgerichtet (`justify-content: flex-start`, gap 14px), `flex: 0 0 auto`
 - Rechte Spalte: `flex: 1 1 auto`
-- Kein Tilt auf Touch-Geräten (siehe 6.). Das Foto ist dort grau. Optional: Foto wird farbig, solange die Rückseite sichtbar ist (`.card.flipped .photo { filter: none }` nur bei `(hover: none)`).
+- Kein Tilt auf Touch-Geräten (siehe 6.). Das Foto ist dort grau.
 
 Text darf auf keiner Breite abgeschnitten werden. Falls 0.6/1 bei sehr kleinen Geräten (320px) nicht reicht, stattdessen `min-height` statt festem Seitenverhältnis verwenden.
 
 ## 8. Barrierefreiheit
 
-- Button ist ein echtes `<button type="button">`, mit `aria-controls` auf die Karte.
+- Jedes Dreh-Icon ist ein echtes `<button type="button">` mit `aria-label` je Sprache und Seite und `aria-controls` auf die Karte. Da die verdeckte Seite `inert` ist, ist immer nur das Icon der sichtbaren Seite fokussierbar.
 - Die verdeckte Seite ist `inert` (nicht fokussierbar, nicht vorgelesen).
-- Nach dem Umdrehen bleibt der Fokus auf dem Button.
+- Nach dem Umdrehen per Icon steht der Fokus auf dem Icon der neuen Seite, nie auf `body`.
 - Kontraste: alle Textfarben oben erreichen mindestens 4.5:1 auf `#FBFBF9`. Nicht heller machen.
 - Klickflächen der Links mindestens 44px hoch auf Mobil (Padding statt größerer Schrift).
 
@@ -217,14 +223,15 @@ Kein Favicon vorhanden: ein schlichtes SVG-Favicon anlegen (schwarzer Kreis auf 
 
 1. `/` und `/de/` laden ohne Konsolenfehler und ohne einen einzigen Request an eine fremde Domain (im Network-Tab prüfen).
 2. Desktop: Karte kippt mit der Maus, Reflex wandert, Schrift bleibt tiefschwarz, Schatten verschiebt sich.
-3. Button dreht die Karte mit Nachfedern. Danach reagiert sie sofort wieder auf die Maus.
+3. Dreh-Icon und Klick auf eine freie Kartenfläche drehen die Karte genau einmal mit Nachfedern. Links drehen nicht. Danach reagiert die Karte sofort wieder auf die Maus. Kein Button unter der Karte, die Karte steht allein zentriert.
 4. Auf der Rückseite reagiert das Foto zuverlässig auf Hover, und alle Links sind zuverlässig klickbar, auch wenn man mehrmals hin- und herdreht.
-5. Mit Tastatur: Tab erreicht Sprachwahl und Button (vorne) bzw. alle Links und Button (hinten), nie Elemente der verdeckten Seite.
+5. Mit Tastatur: Tab erreicht Sprachwahl und Dreh-Icon (vorne) bzw. Dreh-Icon und alle Links (hinten), nie Elemente der verdeckten Seite. Enter auf dem Icon dreht, danach steht der Fokus auf dem Icon der anderen Seite.
 6. Breite 375px: Hochformat-Karte, Rückseite mit horizontaler Trennung, nichts abgeschnitten.
-7. `prefers-reduced-motion`: keine Bewegung außer dem sofortigen Seitenwechsel.
-8. JavaScript deaktiviert: beide Seiten untereinander lesbar, alle Links funktionieren.
+7. `prefers-reduced-motion`: keine Bewegung außer dem sofortigen Seitenwechsel (auch kein Anwackeln).
+8. JavaScript deaktiviert: beide Seiten untereinander lesbar, alle Links funktionieren, keine Dreh-Icons.
 9. Lighthouse (mobil): Performance, Accessibility, Best Practices und SEO jeweils ≥ 95.
 10. Alte Dateien (`js/main.js`, `js/i18n.js`, `js/translations.js`) und alle Tailwind-Klassen sind entfernt.
+11. Anwackeln: einmal etwa 1 s nach dem Laden, endet wieder bei 0°; nicht nach vorherigem Umdrehen, nicht beim nächsten Besuch, nicht mit `?side=back`/`?tilt=…`.
 
 ## 11. Später (nicht Teil dieser Umsetzung)
 
