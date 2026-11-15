@@ -21,6 +21,7 @@
   var reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
   var finePointer = matchMedia('(hover: hover) and (pointer: fine)');
   var TURN_MS = 900;
+  var INTERACTIVE = 'a, button, input, select, textarea, label, summary, [tabindex], [contenteditable]';
   var tx = 0;
   var ty = 0;
   var frame = 0;
@@ -84,7 +85,7 @@
     }
   });
 
-  button.addEventListener('click', function () {
+  function turn() {
     flipped = !flipped;
     card.classList.add('turning');
     clearTimeout(turnTimer);
@@ -92,6 +93,19 @@
       card.classList.remove('turning');
     }, TURN_MS);
     schedule();
+  }
+
+  // The button stays the accessible control (keyboard, screen readers).
+  button.addEventListener('click', turn);
+
+  // A click or tap on a free area of the card turns it too. Only 'click' is used,
+  // so a tap fires once and scrolling never turns the card.
+  card.addEventListener('click', function (e) {
+    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    if (e.target.closest(INTERACTIVE)) return; // links etc. just do their job
+    var selection = window.getSelection();
+    if (selection && !selection.isCollapsed && selection.toString().trim() !== '') return; // user is selecting text
+    turn();
   });
 
   render();

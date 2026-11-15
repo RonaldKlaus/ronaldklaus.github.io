@@ -65,8 +65,7 @@ Keine Frameworks, kein Tailwind-CDN, kein Build-Schritt, keine externen Requests
 ### Rückseite: zwei Spalten
 Linke Spalte (flex 1), rechts davon eine 1px-Trennlinie `#E8E8E4`, 28px Innenabstand zur Linie:
 - Foto rund, 56×56px, `object-fit: cover`, standardmäßig Graustufen (siehe 6.)
-- Ein Satz (17px, line-height 1.4, letter-spacing -0.01em)
-- Klein darunter (12px, `#6A6A70`): Arbeitgeber-Zeile
+- Ein Satz (17px, line-height 1.4, letter-spacing -0.01em), unten in der Spalte
 
 Rechte Spalte (flex 1.2):
 - Label in Versalien (11px, letter-spacing 0.1em, `#6A6A70`): „Things I make“
@@ -82,7 +81,6 @@ Beide Spalten verteilen ihren Inhalt vertikal (`justify-content: space-between`)
 |---|---|
 | Rolle | Software Engineer · Berlin |
 | Satz | 25 years of building software with Ruby, Elixir and TypeScript. I like tools that do one thing well. |
-| Arbeitgeber | Day job: car sharing at Free2move |
 | Label | Things I make |
 | bin dabei | RSVPs and shared costs for hobby groups |
 | Merged | The blog for your website |
@@ -96,7 +94,6 @@ Beide Spalten verteilen ihren Inhalt vertikal (`justify-content: space-between`)
 |---|---|
 | Rolle | Software Engineer · Berlin |
 | Satz | Seit 25 Jahren baue ich Software mit Ruby, Elixir und TypeScript. Ich mag Werkzeuge, die eine Sache gut machen. |
-| Arbeitgeber | Hauptberuf: Carsharing bei Free2move |
 | Label | Was ich baue |
 | bin dabei | Zusagen und geteilte Kosten für Hobbygruppen |
 | Merged | Der Blog für deine Website |
@@ -148,6 +145,7 @@ Links: keine Unterstreichung, bei Hover Unterstreichung mit `text-underline-offs
 
 ### Umdrehen
 - Klick auf den Button dreht die Karte um die Y-Achse um 180°.
+- Ein Klick oder Tap auf eine freie Fläche der Karte dreht sie ebenso (nur `click`-Event). Nicht bei Klicks auf Links oder andere interaktive Elemente, nicht bei aktiver Textauswahl, nicht bei Mittelklick oder Modifier-Tasten. Die Karte bekommt kein `role="button"`, Tastaturbedienung läuft über den Button. Mit JS: `cursor: pointer` auf den Kartenflächen.
 - Während des Umdrehens: `transition: transform .9s cubic-bezier(.34,1.3,.5,1)` (leichtes Nachfedern). Danach wieder die schnelle Tilt-Transition (siehe unten). Umsetzung: Klasse `.turning` setzen und nach 900ms entfernen.
 - Button-Text wechselt zwischen Front- und Back-Label.
 - Die jeweils verdeckte Seite bekommt `inert` UND `pointer-events: none`. **Wichtig:** Ohne `pointer-events: none` liegt die unsichtbare Seite über der sichtbaren und schluckt Hover und Klicks (Fehler aus dem Prototyp).

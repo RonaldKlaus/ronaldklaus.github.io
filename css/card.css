@@ -146,6 +146,11 @@ a:focus-visible,
   transform: rotateY(180deg) translateZ(1px);
 }
 
+/* The whole card turns on click (js/card.js); links keep their own cursor */
+.js .face {
+  cursor: pointer;
+}
+
 /* The hidden face must not swallow hover and clicks */
 .js .face[inert] {
   pointer-events: none;
@@ -246,12 +251,6 @@ h1 {
   line-height: 1.4;
   letter-spacing: -.01em;
   text-wrap: pretty;
-}
-
-.small {
-  margin: 0;
-  font-size: 12px;
-  color: var(--quiet);
 }
 
 .label {
