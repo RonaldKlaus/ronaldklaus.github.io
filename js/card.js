@@ -1,4 +1,4 @@
-/* Visitenkarte · turn, tilt, sheen and the one-time turn hint (see REDESIGN.md, section 6).
+/* Visitenkarte · turn, tilt, sheen, the one-time turn hint and the dark-card dot (see REDESIGN.md, section 6).
  * Language-neutral: the hidden turn button carries its labels in data-label-front / data-label-back.
  * URL parameters for comparisons: ?side=back shows the back, ?tilt=0.5,-0.3 freezes the tilt.
  * #back opens the card on the back without turning (used by the language switch on the back);
@@ -119,6 +119,107 @@
     // Focus only moves if it sat on the face that just became inert (it would fall to <body>).
     // Never on a plain tap: programmatic focus from <body> would show a focus ring on mobile.
     if (focusWillBeLost && srButton) srButton.focus({ preventScroll: true });
+  }
+
+  // Easter egg: the dot on the front toggles a dark card. A dark copy of the front sits
+  // just above the real front. To dark it is revealed by a circle growing out of the dot,
+  // then the card itself turns dark and the copy goes. To light the card turns light at
+  // once under the copy, and the copy's circle shrinks back into the dot. With reduced
+  // motion the copy just fades in or out. Not remembered: a reload is light again.
+  var dot = front && front.querySelector('.dot');
+  var REVEAL_MS = 650;
+  var FADE_MS = 200;
+  var dark = false;
+  var revealing = false;
+
+  // Offsets, not getBoundingClientRect: the card may be tilted in 3D.
+  function offsetWithin(el, ancestor) {
+    var x = 0;
+    var y = 0;
+    while (el && el !== ancestor) {
+      x += el.offsetLeft;
+      y += el.offsetTop;
+      el = el.offsetParent;
+    }
+    return { x: x, y: y };
+  }
+
+  function applyTheme() {
+    card.classList.add('theme-swap');
+    card.classList.toggle('is-dark', dark);
+    dot.setAttribute('aria-pressed', String(dark));
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        card.classList.remove('theme-swap');
+      });
+    });
+  }
+
+  function toggleTheme() {
+    if (revealing) return; // a second click mid-animation is ignored
+    dark = !dark;
+    if (typeof front.animate !== 'function') {
+      applyTheme();
+      return;
+    }
+
+    var copy = front.cloneNode(true);
+    copy.classList.add('reveal', 'is-dark');
+    copy.removeAttribute('aria-label');
+    copy.setAttribute('aria-hidden', 'true');
+    copy.inert = true;
+
+    var keyframes;
+    var options;
+    if (reducedMotion.matches) {
+      keyframes = [{ opacity: 0 }, { opacity: 1 }];
+      options = { duration: FADE_MS, easing: 'ease' };
+    } else {
+      var o = offsetWithin(dot, front);
+      var cx = o.x + dot.offsetWidth / 2;
+      var cy = o.y + dot.offsetHeight / 2;
+      var w = front.offsetWidth;
+      var h = front.offsetHeight;
+      var r = Math.ceil(Math.sqrt(Math.pow(Math.max(cx, w - cx), 2) + Math.pow(Math.max(cy, h - cy), 2))) + 1;
+      var at = ' at ' + cx + 'px ' + cy + 'px)';
+      keyframes = [{ clipPath: 'circle(0px' + at }, { clipPath: 'circle(' + r + 'px' + at }];
+      options = { duration: REVEAL_MS, easing: 'cubic-bezier(.65, 0, .35, 1)' };
+    }
+    options.fill = 'both';
+    if (!dark) {
+      keyframes.reverse();
+    }
+
+    revealing = true;
+    var done = false;
+    function finish() {
+      if (done) return;
+      done = true;
+      if (dark) applyTheme();
+      copy.remove();
+      revealing = false;
+    }
+
+    // Insert, start the animation and (to light) swap the card in the same task,
+    // so no frame shows the light card without the dark copy on top.
+    card.insertBefore(copy, front.nextSibling);
+    try {
+      copy.animate(keyframes, options).onfinish = finish;
+    } catch (e) {
+      if (!dark) applyTheme();
+      finish();
+      return;
+    }
+    if (!dark) applyTheme();
+    setTimeout(finish, (reducedMotion.matches ? FADE_MS : REVEAL_MS) + 500); // safety net if onfinish never fires
+  }
+
+  if (dot) {
+    dot.disabled = false; // disabled in the markup so it is inert without JS
+    dot.addEventListener('click', function (e) {
+      e.stopPropagation(); // never turns the card
+      toggleTheme();
+    });
   }
 
   stage.addEventListener('mousemove', function (e) {

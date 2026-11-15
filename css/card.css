@@ -15,6 +15,36 @@
   --muted: #55555C;
   --quiet: #6A6A70;
   --line: #E8E8E4;
+  /* card-only tokens (redefined by .is-dark below) */
+  --emboss: #C4C4BF;
+  --emboss-hover: #A8A8A3;
+  --shadow: rgba(0, 0, 0, .18);
+  --shadow-near: rgba(0, 0, 0, .08);
+  --sheen-hi: rgba(255, 255, 255, .85);
+  --sheen-band: rgba(255, 255, 255, .55);
+  --sheen-lo: rgba(0, 0, 0, .05);
+  --sheen-hi-back: rgba(255, 255, 255, .7);
+  --sheen-lo-back: rgba(0, 0, 0, .04);
+}
+
+/* Dark card (easter egg: the dot on the front toggles it, js/card.js).
+   Only the card changes; the page background stays light.
+   Contrast on #171718: text 16:1, muted 7.8:1, quiet 5.5:1. */
+.card.is-dark,
+.face.is-dark {
+  --paper: #171718;
+  --text: #F2F2EE;
+  --muted: #ABABB1;
+  --quiet: #8E8E94;
+  --line: #2C2C2E;
+  --emboss: #3A3A3D;
+  --emboss-hover: #55555A;
+  --sheen-hi: rgba(255, 255, 255, .09);
+  --sheen-band: rgba(255, 255, 255, .05);
+  --sheen-lo: rgba(0, 0, 0, .2);
+  --sheen-hi-back: rgba(255, 255, 255, .08);
+  --sheen-lo-back: rgba(0, 0, 0, .16);
+  color: var(--text);
 }
 
 *,
@@ -87,7 +117,7 @@ a:focus-visible {
   border-radius: 14px;
   overflow: clip; /* not a scroll container, so the card grows instead of cutting text */
   background: var(--paper);
-  box-shadow: var(--shx) var(--shy) 60px rgba(0, 0, 0, .18), 0 2px 4px rgba(0, 0, 0, .08);
+  box-shadow: var(--shx) var(--shy) 60px var(--shadow), 0 2px 4px var(--shadow-near);
 }
 
 /* Sheen sits UNDER the content: only the paper shines, text stays black */
@@ -105,13 +135,13 @@ a:focus-visible {
 
 .front .sheen {
   background:
-    radial-gradient(circle at var(--gx) var(--gy), rgba(255, 255, 255, .85) 0%, rgba(255, 255, 255, 0) 42%, rgba(0, 0, 0, .05) 100%),
-    linear-gradient(115deg, rgba(255, 255, 255, 0) calc(var(--band) - 18%), rgba(255, 255, 255, .55) var(--band), rgba(255, 255, 255, 0) calc(var(--band) + 18%));
+    radial-gradient(circle at var(--gx) var(--gy), var(--sheen-hi) 0%, rgba(255, 255, 255, 0) 42%, var(--sheen-lo) 100%),
+    linear-gradient(115deg, rgba(255, 255, 255, 0) calc(var(--band) - 18%), var(--sheen-band) var(--band), rgba(255, 255, 255, 0) calc(var(--band) + 18%));
 }
 
 /* Back is rotated, so the highlight is mirrored horizontally */
 .back .sheen {
-  background: radial-gradient(circle at calc(100% - var(--gx)) var(--gy), rgba(255, 255, 255, .7) 0%, rgba(255, 255, 255, 0) 42%, rgba(0, 0, 0, .04) 100%);
+  background: radial-gradient(circle at calc(100% - var(--gx)) var(--gy), var(--sheen-hi-back) 0%, rgba(255, 255, 255, 0) 42%, var(--sheen-lo-back) 100%);
 }
 
 /* ---------- 3D (only with JS) ---------- */
@@ -190,6 +220,22 @@ a:focus-visible {
   pointer-events: none;
 }
 
+/* Theme reveal (js/card.js): a dark copy of the front, just above the real front,
+   clipped to a circle that grows out of the dot (to dark) or shrinks back into it
+   (to light). Removed afterwards. The shadow is only drawn by the real face, so it
+   stays exactly the same through the switch. */
+.js .face.reveal {
+  transform: translateZ(2px);
+  box-shadow: none;
+  pointer-events: none;
+}
+
+/* The moment the real card swaps its theme, nothing may fade (e.g. the ↻ colour) */
+.js .card.theme-swap *,
+.js .card.theme-swap {
+  transition-property: transform !important;
+}
+
 /* ---------- Front ---------- */
 
 .front {
@@ -206,10 +252,47 @@ a:focus-visible {
 }
 
 .dot {
+  position: relative;
+  flex: none;
   width: 14px;
   height: 14px;
+  margin: 0;
+  padding: 0;
+  border: 0;
   border-radius: 50%;
   background: var(--text);
+  font: inherit;
+  color: inherit;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* Invisible 40px hit area around the 14px dot */
+.dot::before {
+  content: "";
+  position: absolute;
+  inset: -13px;
+  border-radius: 50%;
+}
+
+.js .dot {
+  cursor: pointer;
+  transition: transform .2s ease;
+}
+
+.dot:focus {
+  outline: none;
+}
+
+.dot:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 3px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .js .dot:hover {
+    transform: scale(1.2);
+  }
 }
 
 .lang {
@@ -423,7 +506,7 @@ h1 {
   display: block;
   width: 15px;
   height: 15px;
-  color: #C4C4BF;
+  color: var(--emboss);
   pointer-events: none;
   transition: color .3s ease;
 }
@@ -434,7 +517,7 @@ h1 {
 
 @media (hover: hover) and (pointer: fine) {
   .js .card:hover .turn-hint {
-    color: #A8A8A3;
+    color: var(--emboss-hover);
   }
 }
 
@@ -569,8 +652,13 @@ h1 {
   .js .card,
   .js .card.turning,
   .photo,
-  .turn-hint {
+  .turn-hint,
+  .js .dot {
     transition: none;
+  }
+
+  .js .dot:hover {
+    transform: none;
   }
 
   .js .card.hint {
